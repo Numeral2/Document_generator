@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NumerosConnect</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <style>
+    /* Global Reset and Styling */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: 'Roboto', sans-serif; 
+        background: linear-gradient(135deg, #e0f2f1, #cfd8dc); 
+        color: #333; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        min-height: 100vh; 
+        overflow: hidden;
+    }
+    .container { 
+        width: 600px; 
+        background-color: #fff; 
+        border-radius: 12px; 
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); 
+        padding: 30px; 
+        text-align: center; 
+        max-height: 90vh; 
+        overflow-y: auto;
+    }
+    h1 { 
+        font-size: 2.5em; 
+        color: #004d40; 
+        margin-bottom: 15px; 
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
+        font-weight: bold;
+    }
+    .tagline { 
+        font-style: italic; 
+        color: #777; 
+        margin-bottom: 25px; 
+        font-size: 1.1em;
+    }
+    .section-title { 
+        font-size: 1.8em; 
+        color: #00796b; 
+        margin-bottom: 10px;
+    }
+    .button { 
+        width: 100%; 
+        padding: 12px; 
+        margin: 10px 0; 
+        background-color: #00796b; 
+        color: #fff; 
+        border: none; 
+        border-radius: 30px; 
+        cursor: pointer; 
+        font-weight: bold; 
+        font-size: 1em; 
+        box-shadow: 0 5px 10px rgba(0, 121, 107, 0.3); 
+        transition: all 0.3s ease;
+    }
+    .button:hover { 
+        background-color: #004d40; 
+        transform: translateY(-2px); 
+        box-shadow: 0 5px 15px rgba(0, 121, 107, 0.5);
+    }
+    #generatedText { 
+        padding: 15px; 
+        background: #f1f8e9; 
+        border: 1px solid #ddd; 
+        margin: 20px 0; 
+        border-radius: 8px; 
+        word-wrap: break-word;
+    }
+    .modal { 
+        display: none; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background-color: rgba(0, 0, 0, 0.8); 
+        justify-content: center; 
+        align-items: center; 
+        z-index: 100;
+    }
+    .modal-content { 
+        background-color: #fff; 
+        padding: 25px; 
+        border-radius: 15px; 
+        text-align: center; 
+        width: 350px; 
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .close { 
+        font-size: 1.5em; 
+        color: #888; 
+        cursor: pointer; 
+        position: absolute; 
+        top: 20px; 
+        right: 20px;
+    }
+    .input-field { 
+        width: 100%; 
+        padding: 12px; 
+        margin: 12px 0; 
+        border-radius: 8px; 
+        border: 1px solid #ddd; 
+        transition: border 0.3s ease;
+    }
+    .input-field:focus {
+        border-color: #004d40;
+        outline: none;
+    }
+    .upcoming { 
+        margin-top: 30px; 
+        text-align: center;
+    }
+    .upcoming h2 { 
+        font-size: 1.6em; 
+        color: #00796b; 
+        margin-bottom: 15px;
+    }
+    .card { 
+        background: #fafafa; 
+        padding: 25px; 
+        border-radius: 12px; 
+        margin: 15px 0; 
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+    }
+    .card h3 { 
+        color: #004d40; 
+        font-weight: bold;
+    }
+    .card p { 
+        color: #555; 
+        margin: 12px 0;
+    }
+    .footer { 
+        margin-top: 30px; 
+        font-size: 0.85em; 
+        color: #777; 
+    }
+    .counter { 
+        position: absolute; 
+        top: 10px; 
+        right: 15px; 
+        background-color: #29b6f6; 
+        color: #fff; 
+        padding: 6px 15px; 
+        border-radius: 10px; 
+        font-size: 1em; 
+        font-weight: bold; 
+        box-shadow: 0 5px 15px rgba(0, 149, 246, 0.3);
+    }
+   
+</style>
+
+</head>
+<body>
+    <!-- Visitor Counter -->
+    <div id="visitorCounter" class="counter">Visitors: 1000</div>
+
+    <div class="container">
+        <h1> Document Generator</h1>
+        <p class="tagline">"Automate, Connect, and Grow with Advanced Bots!"</p>
+
+        <!-- Use Bot & How to Use Buttons followed by Coming Soon section -->
+        <div id="initialView">
+            <button class="button" onclick="openModal()">Use Bot</button>
+            <button class="button" onclick="openHowToUse()">How to Use</button> <!-- How to Use Button -->
+
+            <div class="upcoming">
+                <h2>Coming soon</h2>
+                <div class="card">
+                    <h3>Lead Generator on Demand</h3>
+                    <p>Scrape websites in seconds, connect instantly, and gain unlimited leads for your niche!</p>
+                    <button class="button">Coming soon</button>
+                </div>
+                <div class="card">
+                    <h3>Chatbots on Demand</h3>
+                    <p>Create chatbots for 24/7 customer support and stay ahead of 99% of business sites.</p>
+                    <button class="button">Coming soon</button>
+                </div>
+                <div class="footer">
+    &copy; 2024 NumerosConnect. All rights reserved.
+</div>
+
+            </div>
+        </div>
+
+        <!-- Bot Interaction Section -->
+        <div id="botSection" style="display: none;">
+            <textarea id="templateText" placeholder="Write your template with placeholders like (Client_name)..."></textarea>
+            <input type="file" id="uploadDocx" accept=".docx">
+            <div id="placeholders">
+                <div class="placeholder">
+                    <input type="text" class="placeholderName input-field" placeholder="Placeholder name (e.g., Client_name)">
+                    <input type="text" class="placeholderValue input-field" placeholder="Replacement text">
+                </div>
+            </div>
+            <button class="button" id="addPlaceholder">+ Add Placeholder</button>
+            <button class="button" id="generateText">Generate Text</button>
+            <div id="generatedText"></div>
+        </div>
+    </div>
+
+    <!-- Modal for Login/Sign-Up -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2>Welcome Back!</h2>
+            <input type="text" class="input-field" id="loginEmail" placeholder="Email">
+            <input type="password" class="input-field" id="loginPassword" placeholder="Password">
+            <button class="button" onclick="login()">Log In</button>
+            <h3>New Here?</h3>
+            <input type="text" class="input-field" id="signupEmail" placeholder="Email">
+            <input type="password" class="input-field" id="signupPassword" placeholder="Password">
+            <button class="button" onclick="signup()">Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Modal for How to Use -->
+    <div id="howToUseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHowToUse()">×</span>
+            <h2>How to Use</h2>
+            <p>Follow these steps to use the bot:</p>
+            <ol>
+                <li>Click "Use Bot" and log in or sign up if it's your first time.</li>
+                <li>Upload your .docx file by clicking "Choose File".</li>
+                <li>The content of the file will be displayed in the text area.</li>
+                <li>The textarea can be expanded by holding the bottom-right corner and dragging it.</li>
+                <li>Add placeholders like (Client_name) and replacement text. Placeholders must be in brackets in textarea, but not necessary in placeholders tab.</li>
+                <li>Click "Generate Text" to replace placeholders with your text.</li>
+                
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Modal Controls for Login/Sign-Up
+        function openModal() {
+            document.getElementById("authModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("authModal").style.display = "none";
+        }
+
+        // Modal Controls for How to Use
+        function openHowToUse() {
+            document.getElementById("howToUseModal").style.display = "flex";
+        }
+
+        function closeHowToUse() {
+            document.getElementById("howToUseModal").style.display = "none";
+        }
+
+        // Add Placeholder
+        document.getElementById('addPlaceholder').addEventListener('click', () => {
+            const placeholderDiv = document.createElement('div');
+            placeholderDiv.classList.add('placeholder');
+            placeholderDiv.innerHTML = `
+                <input type="text" class="placeholderName input-field" placeholder="Placeholder name">
+                <input type="text" class="placeholderValue input-field" placeholder="Replacement text">
+            `;
+            document.getElementById('placeholders').appendChild(placeholderDiv);
+        });
+
+        // Generate Text
+        document.getElementById('generateText').addEventListener('click', () => {
+            let templateText = document.getElementById('templateText').value;
+            const placeholders = document.querySelectorAll('.placeholder');
+
+            placeholders.forEach(placeholder => {
+                const name = placeholder.querySelector('.placeholderName').value;
+                const value = placeholder.querySelector('.placeholderValue').value;
+                const regex = new RegExp(`\\(${name}\\)`, 'g');
+                templateText = templateText.replace(regex, value);
+            });
+
+            document.getElementById('generatedText').textContent = templateText;
+        });
+
+        // Upload DOCX and display text in textarea
+        document.getElementById('uploadDocx').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file || !file.name.endsWith('.docx')) {
+                alert('Please upload a valid .docx file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const arrayBuffer = e.target.result;
+                const zip = await JSZip.loadAsync(arrayBuffer);
+                const docXml = await zip.file("word/document.xml").async("string");
+                
+                // Extract text content and remove XML tags
+                const text = docXml.replace(/<[^>]+>/g, '');
+                document.getElementById('templateText').value = text;
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Simple LocalStorage Login and Sign Up
+        function signup() {
+            const email = document.getElementById("signupEmail").value;
+            const password = document.getElementById("signupPassword").value;
+            localStorage.setItem(email, password);
+            incrementCounter();
+            alert("Account created! You can now log in.");
+        }
+
+        function login() {
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            if (localStorage.getItem(email) === password) {
+                closeModal();
+                document.getElementById("initialView").style.display = "none";
+                document.getElementById("botSection").style.display = "block";
+                alert("Welcome! Start using the bot.");
+            } else {
+                alert("Incorrect email or password.");
+            }
+        }
+
+        // Visitor/Signup Counter
+        let counter = parseInt(localStorage.getItem("visitorCount")) || 0;
+        document.getElementById("visitorCounter").innerText = `Visitors: ${counter}`;
+
+        function incrementCounter() {
+            counter++;
+            localStorage.setItem("visitorCount", counter);
+            document.getElementById("visitorCounter").innerText = `Visitors: ${counter}`;
+        }
+
+        // Initialize counter on load
+        window.onload = incrementCounter;
+    </script>
+
+
+
+<script type="text/javascript">
+  (function(d, t) {
+    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+    v.onload = function() {
+      if (!document.getElementById('root')) {
+        var root = d.createElement('div');
+        root.id = 'root';
+        d.body.appendChild(root);
+      }
+      if (window.myChatWidget && typeof window.myChatWidget.load === 'function') {
+        window.myChatWidget.load({
+          id: 'f34d6d94-4ac9-4b72-942b-3591b13282d3',
+        });
+      }
+    };
+    v.src = "https://agentivehub.com/production.bundle.min.js";
+    v.type = "text/javascript";
+    s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+</script>
+    
+</body>
+</html>
