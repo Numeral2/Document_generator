@@ -159,14 +159,15 @@
         font-size: 1em; 
         font-weight: bold; 
         box-shadow: 0 5px 15px rgba(0, 149, 246, 0.3);
+    
     }
    
 </style>
 
 </head>
+
+</head>
 <body>
-    <!-- Visitor Counter -->
-    <div id="visitorCounter" class="counter">Visitors: 1000</div>
 
     <div class="container">
         <h1> Document Generator</h1>
@@ -192,7 +193,11 @@
                 <div class="footer">
     &copy; 2024 NumerosConnect. All rights reserved.
 </div>
-
+  <!-- Instagram Link -->
+  <a href="https://www.instagram.com/numerosconnect/?utm_source=ig_web_button_share_sheet" class="instagram-link" target="_blank">
+     Follow us on Instagram
+</a>
+</head>
             </div>
         </div>
 
@@ -333,43 +338,7 @@
                 alert("Incorrect email or password.");
             }
         }
-
-        // Visitor/Signup Counter
-        let counter = parseInt(localStorage.getItem("visitorCount")) || 0;
-        document.getElementById("visitorCounter").innerText = `Visitors: ${counter}`;
-
-        function incrementCounter() {
-            counter++;
-            localStorage.setItem("visitorCount", counter);
-            document.getElementById("visitorCounter").innerText = `Visitors: ${counter}`;
-        }
-
-        // Initialize counter on load
-        window.onload = incrementCounter;
     </script>
-
-
-
-<script type="text/javascript">
-  (function(d, t) {
-    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    v.onload = function() {
-      if (!document.getElementById('root')) {
-        var root = d.createElement('div');
-        root.id = 'root';
-        d.body.appendChild(root);
-      }
-      if (window.myChatWidget && typeof window.myChatWidget.load === 'function') {
-        window.myChatWidget.load({
-          id: 'f34d6d94-4ac9-4b72-942b-3591b13282d3',
-        });
-      }
-    };
-    v.src = "https://agentivehub.com/production.bundle.min.js";
-    v.type = "text/javascript";
-    s.parentNode.insertBefore(v, s);
-  })(document, 'script');
-</script>
     
 </body>
 </html>
