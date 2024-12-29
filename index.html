@@ -86,12 +86,9 @@
     <div class="form-group">
         <label>Generated Search Query</label>
         <button onclick="copyToClipboard()">Copy to Clipboard</button>
-        <button onclick="sendToWebhook()">Send to Webhook</button>
     </div>
 
     <script>
-        const webhookUrl = "https://numeral21.app.n8n.cloud/webhook-test/43aecd30-d4f3-4b7c-863e-3ba88c5346d9"; // Replace with your n8n Webhook URL
-
         function generateQuery() {
             const country = document.getElementById('country').value.trim();
             const jobTitle = document.getElementById('job-title').value.trim();
@@ -144,33 +141,6 @@
             }).catch(() => {
                 alert("Failed to copy query.");
             });
-        }
-
-        function sendToWebhook() {
-            const query = document.getElementById('search-query').value.trim();
-            if (query === "") {
-                alert("No query to send. Please generate a query first.");
-                return;
-            }
-
-            fetch(webhookUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ query })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Query sent to webhook successfully!");
-                    } else {
-                        alert("Failed to send query to webhook.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error sending query to webhook:", error);
-                    alert("An error occurred while sending the query to the webhook.");
-                });
         }
     </script>
 </body>
