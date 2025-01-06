@@ -14,15 +14,15 @@ document
     }
 
     const triggerPrompt = `
-    Generate a detailed and structured prompt based on the following user input. Organize the response into four sections:
-    
-    You are an expert in building solutions. Describe the user's background or goal, if relevant.
-    Define the task or function of the system. Break down the task into clear steps or requirements.
-    Provide a relevant example to clarify expectations.
-    
-    User Input: "${userInput}"
-    
-    Keep the output concise, professional, and under 500 characters.
+  Generate a detailed and structured prompt based on the following user input. Organize the response into four sections:
+  
+  You are an expert in building solutions. Describe the user's background or goal, if relevant.
+  Define the task or function of the system. Break down the task into clear steps or requirements.
+  Provide a relevant example to clarify expectations.
+  
+  User Input: "${userInput}"
+  
+  Keep the output concise, professional, and under 500 characters.
 `;
 
     try {
@@ -66,7 +66,6 @@ document
     const webhookUrl =
       "https://hook.eu2.make.com/ft54h6n9o8eo1f6l6u8quk7yefv41dg3"; // Your Make.com webhook URL
 
-    // Validate email
     if (!email || !email.includes("@")) {
       document.getElementById("responseMessage").textContent =
         "Please enter a valid email.";
@@ -74,7 +73,6 @@ document
       return;
     }
 
-    // Send email to Make.com webhook
     try {
       const response = await fetch(webhookUrl, {
         method: "POST",
@@ -86,7 +84,7 @@ document
         document.getElementById("responseMessage").textContent =
           "Thank you! You'll be notified soon.";
         document.getElementById("responseMessage").style.color = "green";
-        document.getElementById("email").value = ""; // Clear the input
+        document.getElementById("email").value = "";
       } else {
         throw new Error("Failed to submit email.");
       }
@@ -106,7 +104,6 @@ document.getElementById("editButton").addEventListener("click", () => {
 
   document.getElementById("saveButton").style.display = "inline-block";
 
-  // Temporarily disable dragging when editing
   const draggable = document.getElementById("draggable");
   draggable.classList.add("editing");
 });
@@ -118,7 +115,6 @@ document.getElementById("saveButton").addEventListener("click", () => {
 
   document.getElementById("saveButton").style.display = "none";
 
-  // Re-enable dragging after editing
   const draggable = document.getElementById("draggable");
   draggable.classList.remove("editing");
 });
@@ -141,29 +137,55 @@ document.getElementById("openChatGPT").addEventListener("click", () => {
   window.open(chatGPTUrl, "_blank");
 });
 
-// Make Output Tab Draggable
+// Make Output Tab Draggable for Desktop Only
 const draggable = document.getElementById("draggable");
 
 let isDragging = false;
 let offsetX = 0;
 let offsetY = 0;
 
-draggable.addEventListener("mousedown", (e) => {
-  if (draggable.classList.contains("editing")) return; // Disable dragging during editing
+function enableDragging() {
+  if (window.innerWidth >= 768) {
+    // Enable dragging for desktop
+    draggable.addEventListener("mousedown", startDrag);
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", stopDrag);
+
+    draggable.style.position = "absolute";
+    draggable.style.cursor = "grab";
+    draggable.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+  } else {
+    // Disable dragging for mobile
+    draggable.removeEventListener("mousedown", startDrag);
+    document.removeEventListener("mousemove", drag);
+    document.removeEventListener("mouseup", stopDrag);
+
+    draggable.style.position = "static";
+    draggable.style.cursor = "default";
+    draggable.style.boxShadow = "none";
+  }
+}
+
+function startDrag(e) {
+  if (draggable.classList.contains("editing")) return;
   isDragging = true;
   offsetX = e.clientX - draggable.offsetLeft;
   offsetY = e.clientY - draggable.offsetTop;
   draggable.style.cursor = "grabbing";
-});
+}
 
-document.addEventListener("mousemove", (e) => {
+function drag(e) {
   if (isDragging) {
     draggable.style.left = `${e.clientX - offsetX}px`;
     draggable.style.top = `${e.clientY - offsetY}px`;
   }
-});
+}
 
-document.addEventListener("mouseup", () => {
+function stopDrag() {
   isDragging = false;
   draggable.style.cursor = "grab";
-});
+}
+
+// Initialize dragging behavior and handle window resize
+enableDragging();
+window.addEventListener("resize", enableDragging);
