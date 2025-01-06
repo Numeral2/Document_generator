@@ -6,16 +6,17 @@
 }
 
 /* Body Styling */
-body {
+html, body {
     font-family: 'Roboto', Arial, sans-serif;
     background: #f9f9f9;
     color: #333;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items to the top for scrolling */
-    min-height: 100vh;
+    align-items: flex-start; /* Align items to the top */
+    min-height: 100vh; /* Ensure full viewport height */
+    height: auto; /* Allow body to expand with content */
     overflow-y: auto; /* Enable vertical scrolling */
-    padding: 20px; /* Add padding to avoid content sticking to edges */
+    padding: 20px; /* Add spacing around content */
 }
 
 /* Container Styling */
