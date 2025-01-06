@@ -3,146 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkedIn Profile Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f6f9;
-            color: #333;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 24px;
-            color: #0077b5; /* LinkedIn Blue */
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        label {
-            font-size: 14px;
-            display: block;
-            text-align: left;
-            margin: 5px auto;
-            width: 300px;
-        }
-        input, select, textarea, button {
-            width: 300px;
-            padding: 8px;
-            font-size: 14px;
-            margin: 5px auto;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            display: block;
-        }
-        textarea {
-            resize: none;
-        }
-        button {
-            background-color: #0077b5; /* LinkedIn Blue */
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #005582;
-        }
-        .error {
-            font-size: 12px;
-            color: red;
-            display: none;
-            margin-top: 5px;
-        }
-    </style>
+    <title>Prompt Generator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>LinkedIn Profile Search</h1>
-    <div class="form-group">
-        <label for="country">Country <span class="error" id="country-error">*</span></label>
-        <input type="text" id="country" placeholder="Enter the country (e.g., United States)">
+    <div class="container">
+        <h1>Prompt Generator</h1>
+        <form id="prompt-form">
+            <label for="apiKey">OpenAI API Key:</label>
+            <input type="password" id="apiKey" placeholder="Enter your API key (It won't be stored anywhere)" required>
+
+            <label for="userInput">Enter Prompt:</label>
+            <textarea id="userInput" placeholder="Enter your task description..." required></textarea>
+
+            <label for="tokens">Max Tokens:</label>
+            <input type="number" id="tokens" placeholder="70" value="70" required>
+
+            <button type="submit">Generate</button>
+        </form>
+
+        <div id="draggable" class="output-container">
+            <h2>Generated Prompt:</h2>
+            <textarea id="response" class="output" readonly></textarea>
+            <div class="actions">
+                <button id="editButton">Edit</button>
+                <button id="saveButton" style="display: none;">Save</button>
+                <button id="copyButton">Copy</button>
+                <button id="openChatGPT">Open in ChatGPT</button>
+            </div>
+        </div>
+
+        <div class="email-collection">
+            <h2>Stay Updated!</h2>
+            <p>For new free stuff, leave your email, and we’ll notify you:</p>
+            <form id="email-form">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <button type="submit">Submit</button>
+                <p id="responseMessage" style="color: green;"></p>
+            </form>
+        </div>
+
+        <p class="support">
+            Support the Creator: <a href="https://twitter.com/numerosai" target="_blank">@numerosai</a>
+        </p>
     </div>
-    <div class="form-group">
-        <label for="job-title">Job Title <span class="error" id="job-title-error">*</span></label>
-        <input type="text" id="job-title" placeholder="Enter the job title (e.g., Real Estate Agent)">
-    </div>
-    <div class="form-group">
-        <label for="location">Location <span class="error" id="location-error">*</span></label>
-        <input type="text" id="location" placeholder="Enter the location (e.g., New York)">
-    </div>
-    <div class="form-group">
-        <label for="email-domain">Email Domain</label>
-        <select id="email-domain">
-            <option value="gmail.com">gmail.com</option>
-            <option value="yahoo.com">yahoo.com</option>
-            <option value="outlook.com">outlook.com</option>
-        </select>
-    </div>
-    <button onclick="generateQuery()">Generate Search Query</button>
-    <div class="form-group">
-        <textarea id="search-query" readonly placeholder="Your query will appear here..." rows="4"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Generated Search Query</label>
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    </div>
-
-    <script>
-        function generateQuery() {
-            const country = document.getElementById('country').value.trim();
-            const jobTitle = document.getElementById('job-title').value.trim();
-            const location = document.getElementById('location').value.trim();
-            const emailDomain = document.getElementById('email-domain').value;
-
-            let isValid = true;
-
-            // Validate Country
-            if (!country) {
-                document.getElementById('country-error').style.display = 'inline';
-                isValid = false;
-            } else {
-                document.getElementById('country-error').style.display = 'none';
-            }
-
-            // Validate Job Title
-            if (!jobTitle) {
-                document.getElementById('job-title-error').style.display = 'inline';
-                isValid = false;
-            } else {
-                document.getElementById('job-title-error').style.display = 'none';
-            }
-
-            // Validate Location
-            if (!location) {
-                document.getElementById('location-error').style.display = 'inline';
-                isValid = false;
-            } else {
-                document.getElementById('location-error').style.display = 'none';
-            }
-
-            if (!isValid) return;
-
-            const query = `~ "${jobTitle}" "${location}" "${country}" "@${emailDomain}" -intitle:"profiles" -inurl:"dir/ " site:www.linkedin.com/`;
-            document.getElementById('search-query').value = query;
-        }
-
-        function copyToClipboard() {
-            const queryText = document.getElementById('search-query');
-            if (queryText.value.trim() === "") {
-                alert("No query to copy. Please generate a query first.");
-                return;
-            }
-
-            queryText.select();
-            queryText.setSelectionRange(0, 99999); // For mobile devices
-            navigator.clipboard.writeText(queryText.value).then(() => {
-                alert("Query copied to clipboard!");
-            }).catch(() => {
-                alert("Failed to copy query.");
-            });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
-
