@@ -72,11 +72,26 @@ button {
     top: 50px;
     left: 50px;
     padding: 12px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .output-container textarea {
-    resize: both; /* Allow resizing in both directions */
-    overflow: auto; /* Ensure scrollbars appear if content overflows */
+    resize: both;
+    overflow: auto;
+}
+
+/* Mobile Styling: Move output container into the main column */
+@media (max-width: 768px) {
+    .output-container {
+        position: static;
+        margin-top: 15px;
+        cursor: default;
+        box-shadow: none;
+    }
 }
 
 /* Email Collection Section */
@@ -115,10 +130,5 @@ button {
     input, textarea, button {
         font-size: 11px;
         padding: 6px;
-    }
-
-    .output-container {
-        top: 20px;
-        left: 20px;
     }
 }
